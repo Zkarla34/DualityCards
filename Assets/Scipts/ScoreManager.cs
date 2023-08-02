@@ -12,7 +12,7 @@ public class ScoreManager : MonoBehaviour
 
     private void Start()
     {
-        counterText.text = "Score: " + counter;
+        counterText.text = "" + counter;
     }
     public bool CompareCards(GameObject cardOne, GameObject cardTwo)
     {

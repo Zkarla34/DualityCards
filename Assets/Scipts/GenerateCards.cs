@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class GenerateCards : MonoBehaviour
 {
@@ -10,17 +12,19 @@ public class GenerateCards : MonoBehaviour
     public Transform cardParent;
     private List<GameObject> cards = new List<GameObject>();
     public Card cardShown;
-    public GameObject textWin;
+    public MenuWin textWin;
+    public ScoreManager scoreManager;
 
     public int width;
     public int height;
-    public bool show = true;
+    public bool show;
     public bool winShow;
     public int counter;
     public int numFoundCouples;
+    public float showDuration = 2f;
 
 
-    void Start()
+    void Awake()
     {
         CreateCards();
     }
@@ -43,17 +47,18 @@ public class GenerateCards : MonoBehaviour
 
                 cards.Add(cardTemp);
                 cardTemp.GetComponent<Card>().positionOriginal = positionTem;
-               // cardTemp.GetComponent<Card>().idCard = cont;
+                cardTemp.GetComponent<Card>().idCard = cont;
                 cardTemp.transform.parent = cardParent;
                 cont++;
             }
         }
-        AssignTextures();
+        AssignTexturesCards();
         ShuffleCards();
     }
 
-    void AssignTextures()
+    void AssignTexturesCards()
     {
+
         for(int i=0; i <cards.Count; i++)
         {
             cards[i].GetComponent<Card>().ChangeTexture(cardTexture[(i)/2]);
@@ -85,15 +90,13 @@ public class GenerateCards : MonoBehaviour
         }
         else
         {
-            if( CompareCards(_card.gameObject, cardShown.gameObject))
+            if (scoreManager.CompareCards(_card.gameObject, cardShown.gameObject))  
             {
-                Debug.Log("Pglo");
                 numFoundCouples++;
                 if(numFoundCouples == cards.Count / 2)
                 {
-                    Debug.Log("Pglox4");
-
-                   // textWin.GetComponent<MenuWin>().WinShow();
+                    gameObject.SetActive(false);
+                    textWin.GetComponent<MenuWin>().WinShow();
                 }
             }
             else

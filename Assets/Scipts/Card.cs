@@ -8,11 +8,11 @@ public class Card : MonoBehaviour
     public Texture2D textureImage;
     public Vector3 positionOriginal;
     public GameObject createCard;
+    public Material Image;
 
     public int idCard = 0;
     public float timeDelay;
     public bool showing;
-
 
 
     private void Awake()
@@ -25,7 +25,6 @@ public class Card : MonoBehaviour
     }
     void OnMouseDown()
     {
-        Debug.Log(idCard.ToString());
         ShowCard();
     }
     //Change texture of card 

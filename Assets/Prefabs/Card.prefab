@@ -113,7 +113,7 @@ MonoBehaviour:
   textureCover: {fileID: 2800000, guid: 7efd0f508f4e8a843a442fbd6a516fcf, type: 3}
   textureImage: {fileID: 0}
   positionOriginal: {x: 0, y: 0, z: 0}
-  createCard: {fileID: 0}
+  createCard: {fileID: 6329327869628609185}
   idCard: 0
   timeDelay: 1
-  showing: 0
+  showing: 1
