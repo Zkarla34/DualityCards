@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour
 {
 
-    public int counter = 0;
-    public TMP_Text counterText;
+    public int counter;
+    public Text counterText;
 
 
     private void Start()
     {
-        counterText.text = "" + counter;
+        counterText.text = "" + counter.ToString();
+        GameManager.Instance.score = counter;
     }
     public bool CompareCards(GameObject cardOne, GameObject cardTwo)
     {

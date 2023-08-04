@@ -90,7 +90,7 @@ public class GenerateCards : MonoBehaviour
         }
         else
         {
-            if (scoreManager.CompareCards(_card.gameObject, cardShown.gameObject))  
+            if (scoreManager.CompareCards(_card.gameObject, cardShown.gameObject))
             {
                 numFoundCouples++;
                 if(numFoundCouples == cards.Count / 2)

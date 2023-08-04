@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class CreditsScene : MonoBehaviour
+public class ResetLevel : MonoBehaviour
 {
-    public void GoMenu()
+    public void TryAgain()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
+
 }
