@@ -96,7 +96,7 @@ public class GenerateCards : MonoBehaviour
                 if(numFoundCouples == cards.Count / 2)
                 {
                     gameObject.SetActive(false);
-                    textWin.GetComponent<MenuWin>().WinShow();
+                    textWin.GetComponent<MenuWin>().WinShow(); 
                 }
             }
             else

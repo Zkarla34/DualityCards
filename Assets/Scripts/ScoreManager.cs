@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour
 {
+    public static ScoreManager Instance;
 
     public int counter;
     public Text counterText;
@@ -14,8 +13,8 @@ public class ScoreManager : MonoBehaviour
 
     private void Start()
     {
+        Instance = this;
         counterText.text = "" + counter.ToString();
-        GameManager.Instance.score = counter;
     }
     public bool CompareCards(GameObject cardOne, GameObject cardTwo)
     {
@@ -48,5 +47,8 @@ public class ScoreManager : MonoBehaviour
             counter = 0;
         }
         counterText.text = "" + counter;
+        Debug.Log(counter);
     }
+
+    
 }

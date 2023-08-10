@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
 {
-    public static MenuController Instance;
+   //public static MenuController Instance;
     public InputField inputName;
     public Image imageOk;
     public GameObject butonSave;
