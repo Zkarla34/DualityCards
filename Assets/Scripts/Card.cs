@@ -8,7 +8,6 @@ public class Card : MonoBehaviour
     public Texture2D textureImage;
     public Vector3 positionOriginal;
     public GameObject createCard;
-    public Material Image;
 
     public int idCard = 0;
     public float timeDelay;

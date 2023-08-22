@@ -362,6 +362,7 @@ GameObject:
   - component: {fileID: 328149878}
   - component: {fileID: 328149881}
   - component: {fileID: 328149880}
+  - component: {fileID: 328149883}
   - component: {fileID: 328149879}
   - component: {fileID: 328149882}
   m_Layer: 5
@@ -436,8 +437,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 328149882}
-        m_TargetAssemblyTypeName: CreditsScene, Assembly-CSharp
+      - m_Target: {fileID: 328149883}
+        m_TargetAssemblyTypeName: ResetLevel, Assembly-CSharp
         m_MethodName: GoMenu
         m_Mode: 1
         m_Arguments:
@@ -495,7 +496,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 328149877}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e86fe413979c4204e8c8ca772ac1649f, type: 3}
+  m_Script: {fileID: 11500000, guid: c5055d46a8054544391e12e081cecc3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &328149883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328149877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5055d46a8054544391e12e081cecc3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &519219208
@@ -1218,7 +1231,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Created by: Zulma Solano'
+  m_text: "Created by: Zulma Solano \n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9a5b5ce26fbc3bc49b407b8843c206a0, type: 2}
   m_sharedMaterial: {fileID: 112589109115471338, guid: 9a5b5ce26fbc3bc49b407b8843c206a0, type: 2}

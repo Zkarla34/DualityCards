@@ -8,14 +8,18 @@ public class MenuWin : MonoBehaviour
 {
 
     public GameObject menu;
+    public GameObject score;
     public Text textWin;
     public Text namePlayer;
-    public Text scoreText;
-    
+    public Text nameInitial;
+    private PlayerInfo scoreBest;
+
     public bool menuActive;
 
     private void Start()
     {
+
+        nameInitial.text = GameManager.Instance.playerName;
         menu.SetActive(false);
         menuActive = false;
     }
@@ -24,11 +28,16 @@ public class MenuWin : MonoBehaviour
         namePlayer.text = GameManager.Instance.playerName + " your score is:  " + ScoreManager.Instance.counter;
         menu.SetActive(true);
         menuActive = true;
+        score.SetActive(false);
     }
-
     public void WinHide()
     {
         menu.SetActive(false);
         menuActive = false;
+    }
+
+    public void ShowBestScore()
+    {
+
     }
 }

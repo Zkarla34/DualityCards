@@ -5,14 +5,15 @@ using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
+using UnityEditor;
 
 public class MenuController : MonoBehaviour
 {
-   //public static MenuController Instance;
     public InputField inputName;
     public Image imageOk;
     public GameObject butonSave;
     public GameObject panelNickName;
+
     internal string playerName;
 
     private void Start()
@@ -54,5 +55,16 @@ public class MenuController : MonoBehaviour
     public void GoCredits()
     {
         SceneManager.LoadScene(2);
+    }
+
+    public void Exit()
+    {
+
+#if UNITY_EDITOR
+       // GameManager.Instance.SaveName();
+        EditorApplication.ExitPlaymode();
+#else
+        Application.Quit(); // original code to quit Unity player
+#endif
     }
 }

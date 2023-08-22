@@ -32,8 +32,6 @@ public class ScoreManager : MonoBehaviour
         }
         return result;
     }
-
-
     public void AddScore()
     {
         counter = counter + 10;
@@ -49,6 +47,4 @@ public class ScoreManager : MonoBehaviour
         counterText.text = "" + counter;
         Debug.Log(counter);
     }
-
-    
 }

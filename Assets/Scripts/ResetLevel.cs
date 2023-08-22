@@ -9,5 +9,8 @@ public class ResetLevel : MonoBehaviour
     {
         SceneManager.LoadScene(1);
     }
-
+    public void GoMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
 }

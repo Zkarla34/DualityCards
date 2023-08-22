@@ -2,14 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
+using UnityEngine.UI;
+using Unity.VisualScripting;
 
+[System.Serializable]
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
     public string playerName;
-    public int score;
-
 
     private void Awake()
     {
@@ -21,6 +23,13 @@ public class GameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
+
+
+    public SaveLoadBest playerInfo;
+
+    // Llamada cuando se alcanza un nuevo puntaje alto
+    public void NewHighScoreAchieved(string playerName, int newScore)
+    {
+        playerInfo.UpdateHighScore(playerName, newScore);
+    }
 }
-
-
