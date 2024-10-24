@@ -6,13 +6,18 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
 using UnityEditor;
+using System;
 
 public class MenuController : MonoBehaviour
 {
-    public InputField inputName;
-    public Image imageOk;
-    public GameObject butonSave;
-    public GameObject panelNickName;
+    public MenuTransitionsUI menuTransitionsUI;
+    public GameManager gameManager;
+
+    [SerializeField] private InputField inputName;
+    [SerializeField] private Image imageOk;
+    [SerializeField] private GameObject butonSave;
+    [SerializeField] private GameObject panelNickName;
+    [SerializeField] private ParticleSystem particleEffectPanelNickName;
 
     internal string playerName;
 
@@ -25,22 +30,29 @@ public class MenuController : MonoBehaviour
 
     private void Update()
     {
-        if (inputName.text.Length < 4) 
+        if (inputName.text.Length < 3) 
         {
             imageOk.color = Color.red;
             butonSave.SetActive(false);
         }
-        if(inputName.text.Length >= 4)
+        if(inputName.text.Length >= 3)
         {
             imageOk.color = Color.green;
             butonSave.SetActive(true);
         }
     }
 
+    public void OnPlayButtonClicked()
+    {
+        ShowPanelNickName();
+    }
+
     //Show panel nickname
-    public void ShowPanelNickName()
+    private void ShowPanelNickName()
     {
         panelNickName.SetActive(true);
+        particleEffectPanelNickName.Play();
+        menuTransitionsUI.ShowPanelImageNickName();
     }
 
     //Click on button save in the panel Nickname
@@ -48,7 +60,9 @@ public class MenuController : MonoBehaviour
     {
         string playerName = inputName.text;
         GameManager.Instance.playerName = playerName;
-        SceneManager.LoadScene(1);
+        particleEffectPanelNickName.Play();
+        menuTransitionsUI.HidePanelImageNickName();
+        StartCoroutine(gameManager.NextScene(0.7f,1));
     }
 
     //Go to credits

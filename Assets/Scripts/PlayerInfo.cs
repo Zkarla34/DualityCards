@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerInfo
 {
-    [SerializeField]
-    public int scorePlayer;
-    [SerializeField]
-    public string namePlayer;
+    [SerializeField] public int scorePlayer;
+    [SerializeField] public string namePlayer;
 }

@@ -35,9 +35,4 @@ public class MenuWin : MonoBehaviour
         menu.SetActive(false);
         menuActive = false;
     }
-
-    public void ShowBestScore()
-    {
-
-    }
 }

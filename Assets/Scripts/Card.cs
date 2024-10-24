@@ -1,58 +1,71 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Card : MonoBehaviour
 {
-    public Texture2D textureCover;
-    public Texture2D textureImage;
-    public Vector3 positionOriginal;
-    public GameObject createCard;
+    [SerializeField] private Texture2D textureCover;
+    [SerializeField] private Texture2D textureImage;
+    [SerializeField] private GameObject createCard;
+    [SerializeField] private float hideDelay;
 
-    public int idCard = 0;
-    public float timeDelay;
-    public bool showing;
+    private MeshRenderer meshRenderer;
+    private GenerateCards generateCards;
+
+    public int idCard { get; set; }
+    public bool isShowing { get; private set; }
+
+    public Vector3 positionOriginal;
 
 
     private void Awake()
     {
-        createCard = GameObject.Find("CardsRandom");
+        meshRenderer = GetComponent<MeshRenderer>();
+        generateCards = FindObjectOfType<GenerateCards>();
+        idCard = 0;
     }
     private void Start()
     {
-        HideCard();
+        HideCardInstantly();
     }
     void OnMouseDown()
     {
-        ShowCard();
+        if (!isShowing && generateCards.show)
+        {
+            ShowCard();
+        }
     }
     //Change texture of card 
-    public void ChangeTexture(Texture2D _texture)
+    public void SetTexture(Texture2D newtexture)
     {
-        textureImage = _texture;
+        textureImage = newtexture;
     }
     //Show card image
     public void ShowCard()
     {
-        if(!showing && createCard.GetComponent<GenerateCards>().show)
+        if(!isShowing && generateCards.show)
         {
-            showing = true;
-            GetComponent<MeshRenderer>().material.mainTexture = textureImage;
-            createCard.GetComponent<GenerateCards>().SelectCard(this);
+            isShowing = true;
+            meshRenderer.material.mainTexture = textureImage;
+            generateCards.SelectCard(this);
         } 
     }
 
     // Hide card image and show cover image
-    public void HideCard()
+    public void HideCardInstantly()
     {
-        Invoke("Hide", timeDelay);
-        createCard.GetComponent<GenerateCards>().show = false;  
+        meshRenderer.material.mainTexture = textureCover;
+        isShowing = false;
+        generateCards.show = true;
     }
 
-    public void Hide()
+    public void HideCard()
     {
-        GetComponent<MeshRenderer>().material.mainTexture = textureCover;
-        showing = false;
-        createCard.GetComponent<GenerateCards>().show = true;
+        StartCoroutine(HideCardAfterDelay());
+    }
+
+    private IEnumerator HideCardAfterDelay()
+    {
+        yield return new WaitForSeconds(hideDelay);
+        HideCardInstantly();
     }
 }

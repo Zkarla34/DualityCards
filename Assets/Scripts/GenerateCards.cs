@@ -7,22 +7,21 @@ using UnityEngine.UI;
 
 public class GenerateCards : MonoBehaviour
 {
-    public GameObject cardPrefab; 
-    public Texture2D[] cardTexture;
-    public Transform cardParent;
-    private List<GameObject> cards = new List<GameObject>();
-    public Card cardShown;
-    public MenuWin textWin;
-    public ScoreManager scoreManager;
+    [Header("Game Settings")]
+    [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private Texture2D[] cardTextures;
+    [SerializeField] private Transform cardParent;
+    [SerializeField] private int width;
+    [SerializeField] private int height;
+    [SerializeField] private float showDuration = 2f;
 
-    public int width;
-    public int height;
+    [SerializeField] private MenuWin menuWin;
+    [SerializeField] private ScoreManager scoreManager;
+
+    private List<Card> cards = new List<Card>();
+    private Card cardShown;
+    private int numFoundCouples;
     public bool show;
-    public bool winShow;
-    public int counter;
-    public int numFoundCouples;
-    public float showDuration = 2f;
-
 
     void Awake()
     {
@@ -31,81 +30,93 @@ public class GenerateCards : MonoBehaviour
 
     public void CreateCards()
     {
-        int cont = 0;
+        float factor = 5.0f / width;
+        int cardID = 0;
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
-                float factor = 5.0f/ width;
-
-                Vector3 positionTem = new Vector3(j*factor, 0, i*factor);
-
+                Vector3 positionTem = new Vector3(j * factor, 0, i * factor);
                 GameObject cardTemp = Instantiate(cardPrefab, positionTem, 
-                    Quaternion.Euler(new Vector3(0,180,0)));
+                    Quaternion.Euler(0,180,0), cardParent);
 
                 cardTemp.transform.localScale *= factor;
 
-                cards.Add(cardTemp);
-                cardTemp.GetComponent<Card>().positionOriginal = positionTem;
-                cardTemp.GetComponent<Card>().idCard = cont;
-                cardTemp.transform.parent = cardParent;
-                cont++;
+                Card card = cardTemp.GetComponent<Card>();
+                card.positionOriginal = positionTem;
+                card.idCard = cardID;
+                cards.Add(card);
+                cardID++;
             }
         }
-        AssignTexturesCards();
+        AssignTexturesToCards();
         ShuffleCards();
     }
 
-    void AssignTexturesCards()
+    void AssignTexturesToCards()
     {
+        int texturePairs = cardTextures.Length;
 
         for(int i=0; i <cards.Count; i++)
         {
-            cards[i].GetComponent<Card>().ChangeTexture(cardTexture[(i)/2]);
-            cards[i].GetComponent<Card>().idCard = i / 2;
+            int textureIndex = i / 2;
+            cards[i].SetTexture(cardTextures[textureIndex]);
+            cards[i].idCard = textureIndex;
         }
     }
 
     void ShuffleCards()
     {
-        int shuffleRandom;
-
         for(int i = 0; i< cards.Count; i++)
         {
-            shuffleRandom = Random.Range(i, cards.Count);
-
-            cards[i].transform.position = cards[shuffleRandom].transform.position;
-            cards[shuffleRandom].transform.position = cards[i].GetComponent<Card>().positionOriginal;
-
-            cards[i].GetComponent<Card>().positionOriginal = cards[i].transform.position;
-            cards[shuffleRandom].GetComponent<Card>().positionOriginal = cards[shuffleRandom].transform.position;
+            int randomIndex = Random.Range(i, cards.Count);
+            SwapCardPositions(cards[i], cards[randomIndex]);
         }
     }
 
-    public void SelectCard(Card _card)
+    private void SwapCardPositions(Card cardA, Card cardB)
+    {
+        Vector3 tempPosition = cardA.positionOriginal;
+        cardA.positionOriginal = cardB.positionOriginal;
+        cardB.positionOriginal = tempPosition;
+
+        cardA.transform.position = cardA.positionOriginal;
+        cardB.transform.position = cardB.positionOriginal;
+    }
+    public void SelectCard(Card selectedCard)
     {
         if(cardShown == null)
         {
-            cardShown = _card;
+            cardShown = selectedCard;
         }
         else
         {
-            if (scoreManager.CompareCards(_card.gameObject, cardShown.gameObject))
+            if (scoreManager.CompareCards(selectedCard.gameObject, cardShown.gameObject))
             {
-                numFoundCouples++;
-                if(numFoundCouples == cards.Count / 2)
-                {
-                    gameObject.SetActive(false);
-                    textWin.GetComponent<MenuWin>().WinShow();
-                }
+                HandleMatch();
             }
             else
             {
-                _card.HideCard();
-                cardShown.HideCard();
+                StartCoroutine(HideCardsAfterDelay(selectedCard, cardShown));
             }
             cardShown = null;
         }
     }
-}
 
+    private void HandleMatch()
+    {
+        numFoundCouples++;
+        if(numFoundCouples == cards.Count / 2)
+        {
+            menuWin.WinShow();
+            gameObject.SetActive(false);
+        }
+    }
+
+    private IEnumerator HideCardsAfterDelay(Card firstCard, Card secondCard)
+    {
+        yield return new WaitForSeconds(showDuration);
+        firstCard.HideCardInstantly();
+        secondCard.HideCardInstantly();
+    }
+}

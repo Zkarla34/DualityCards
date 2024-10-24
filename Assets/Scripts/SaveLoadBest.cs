@@ -13,8 +13,8 @@ public class SaveLoadBest : MonoBehaviour
     private void Start()
     {
         filePath = Application.persistentDataPath + "/savefile.json";
-        Debug.Log(highScore.namePlayer);
-        Debug.Log(highScore.scorePlayer);
+       // Debug.Log(highScore.namePlayer);
+      
         LoadHighScore();
     }
 

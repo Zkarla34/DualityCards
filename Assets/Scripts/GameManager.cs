@@ -32,4 +32,11 @@ public class GameManager : MonoBehaviour
     {
         playerInfo.UpdateHighScore(playerName, newScore);
     }
+
+    public IEnumerator NextScene(float time, int scene)
+    {
+        yield return new WaitForSeconds(time);
+        SceneManager.LoadScene(scene);
+    }
+
 }
