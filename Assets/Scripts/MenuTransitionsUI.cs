@@ -8,8 +8,6 @@ using Unity.VisualScripting;
 
 public class MenuTransitionsUI : MonoBehaviour
 {
-    public MenuController menuController;
-
     [SerializeField] private TMP_Text textsPanel;
     [SerializeField] private GameObject[] buttons;
     [SerializeField] private Image image;

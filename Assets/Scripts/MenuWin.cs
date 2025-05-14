@@ -11,15 +11,11 @@ public class MenuWin : MonoBehaviour
     public GameObject score;
     public Text textWin;
     public Text namePlayer;
-    public Text nameInitial;
-    private PlayerInfo scoreBest;
 
     public bool menuActive;
 
     private void Start()
     {
-
-        nameInitial.text = GameManager.Instance.playerName;
         menu.SetActive(false);
         menuActive = false;
     }

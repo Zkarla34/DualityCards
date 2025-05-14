@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerName: 
-  playerInfo: {fileID: 0}
+  currentScore: 0
 --- !u!4 &21938207
 Transform:
   m_ObjectHideFlags: 0
@@ -668,11 +668,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 468484277}
   m_CullTransparentMesh: 1
---- !u!198 &611529510 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 141433446842962268, guid: 9fe8f8b3288e45a44af36ff8aa04486e, type: 3}
-  m_PrefabInstance: {fileID: 1773571756}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &611529512 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 141433446842962274, guid: 9fe8f8b3288e45a44af36ff8aa04486e, type: 3}
@@ -996,7 +991,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fba4e888bfcb92c4eb68aeb9e0edcdbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuController: {fileID: 1653537530}
   textsPanel: {fileID: 199121548}
   buttons:
   - {fileID: 1209385917}
@@ -1069,7 +1063,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1653537530}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: GoPlay
+        m_MethodName: OnSaveButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1767,6 +1761,7 @@ GameObject:
   - component: {fileID: 1653537526}
   - component: {fileID: 1653537525}
   - component: {fileID: 1653537530}
+  - component: {fileID: 1653537531}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1877,13 +1872,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed8e78624fab4cd489ceccd0452524a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuTransitionsUI: {fileID: 916066878}
+  menuView: {fileID: 1653537531}
   gameManager: {fileID: 21938206}
+  playerModel:
+    Name: 
+    Score: 0
+--- !u!114 &1653537531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1653537523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc1824c8133b8784b9d49288951f1e24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   inputName: {fileID: 210795781}
   imageOk: {fileID: 1082054081}
-  butonSave: {fileID: 944109020}
+  buttonSave: {fileID: 944109020}
   panelNickName: {fileID: 629388456}
-  particleEffectPanelNickName: {fileID: 611529510}
+  particleEffectPanelNickName: {fileID: 2095828221}
+  menuTransitionsUI: {fileID: 916066878}
 --- !u!1001 &1773571756
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2192,7 +2203,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1653537530}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: GoCredits
+        m_MethodName: OnCreditsButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2405,3 +2416,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!198 &2095828221 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 141433446842962268, guid: 9fe8f8b3288e45a44af36ff8aa04486e, type: 3}
+  m_PrefabInstance: {fileID: 1773571756}
+  m_PrefabAsset: {fileID: 0}

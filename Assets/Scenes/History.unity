@@ -705,8 +705,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1363905745}
-        m_TargetAssemblyTypeName: ControllerHistory, Assembly-CSharp
+      - m_Target: {fileID: 1363905746}
+        m_TargetAssemblyTypeName: HistoryController, Assembly-CSharp
         m_MethodName: ButtonShowMessageFast
         m_Mode: 1
         m_Arguments:
@@ -768,6 +768,7 @@ GameObject:
   - component: {fileID: 1363905742}
   - component: {fileID: 1363905741}
   - component: {fileID: 1363905745}
+  - component: {fileID: 1363905746}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -866,12 +867,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 1363905740}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55722da9da708eb42aa25a4559d68095, type: 3}
+  m_Script: {fileID: 11500000, guid: 4bcf4e7be740aa244a21b287e1a90607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueTextHistory: {fileID: 383253291}
   buttonSkip: {fileID: 1227351567}
-  wordSpeed: 0.1
+--- !u!114 &1363905746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1363905740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb0d0046e5e6bd8499313eb34bc4afd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  historyView: {fileID: 1363905745}
 --- !u!1 &2067706236
 GameObject:
   m_ObjectHideFlags: 0
