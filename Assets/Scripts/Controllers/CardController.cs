@@ -1,11 +1,13 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CardController : MonoBehaviour
 {
-  [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private GameObject cardPrefab;
     [SerializeField] private Texture2D[] textures;
     [SerializeField] private Texture2D backTexture;
     [SerializeField] private Transform cardParent;
@@ -27,7 +29,7 @@ public class CardController : MonoBehaviour
     private void Awake()
     {
         levelModel = new LevelModel();
-        GenerateCards();
+        StartCoroutine(DelayGenerateCards(1f));
     }
 
     private void ClearPreviousCards()
@@ -42,12 +44,19 @@ public class CardController : MonoBehaviour
 
     private void GenerateCards()
     {
-        ClearPreviousCards();
-
-        int pairCount = 2 + (currentLevel - 1); // parejas por nivel
+        int pairCount = 2 + (currentLevel - 1);
         int totalCards = pairCount * 2;
-        int gridWidth = Mathf.CeilToInt(Mathf.Sqrt(totalCards));
-        float spacing = 2.5f;
+
+        // Cálculo dinámico del tamaño de la grilla
+        int gridCols = Mathf.CeilToInt(Mathf.Sqrt(totalCards));
+        int gridRows = Mathf.CeilToInt((float)totalCards / gridCols);
+
+        // Disminuye el tamaño de las cartas a medida que hay más
+        float scaleFactor = Mathf.Clamp(1f - (currentLevel * 0.05f), 0.5f, 1f);
+        float spacing = 2.5f * scaleFactor;
+
+        float offsetX = (gridCols - 1) * spacing * 0.5f;
+        float offsetZ = (gridRows - 1) * spacing * 0.5f;
 
         List<(int id, Texture2D tex)> selected = new();
 
@@ -68,8 +77,21 @@ public class CardController : MonoBehaviour
 
         for (int i = 0; i < selected.Count; i++)
         {
-            Vector3 pos = new Vector3((i % gridWidth) * spacing, 0, (i / gridWidth) * spacing);
+            int row = i / gridCols;
+            int col = i % gridCols;
+
+            Vector3 pos = new Vector3(col * spacing - offsetX, 0f, - row * spacing + offsetZ);
+
             GameObject go = Instantiate(cardPrefab, pos, Quaternion.identity, cardParent);
+
+            // Escalado dinámico según nivel
+            go.transform.localScale = Vector3.zero;
+
+            // Aparecer animado
+            LeanTween.scale(go, Vector3.one * scaleFactor, 0.3f)
+                     .setEaseOutBack()
+                     .setDelay(i * 0.05f);
+
 
             CardView card = go.GetComponent<CardView>();
             card.Initialize(this, backTexture);
@@ -103,16 +125,20 @@ public class CardController : MonoBehaviour
                     selected.PlayMatchParticles();
                     showCard.PlayMatchParticles();
 
+                    cards.Remove(selected);
+                    cards.Remove(showCard);
+
+                   
                     selected.DeactivateAfterMatch();
                     showCard.DeactivateAfterMatch();
 
-                    cards.Remove(selected);
-                    cards.Remove(showCard);
                     showCard = null;
+
+                    AudioManager.Instance.PlayMatchSound(currentLevel - 1);
 
                     if (cards.Count == 0)
                     {
-                        Invoke(nameof(LoadNextLevel), 2f);
+                        Invoke(nameof(LoadNextLevel), 0.5f);
                     }
                     else
                     {
@@ -127,6 +153,7 @@ public class CardController : MonoBehaviour
                         showCard.Hide();
                         showCard = null;
                         EnableInteraction();
+                        AudioManager.Instance.PlayWrongMatch();
                     });
                 }
             }
@@ -148,7 +175,15 @@ public class CardController : MonoBehaviour
         {
             currentLevel = nextLevel;
             levelModel.currentLevel = currentLevel;
-            GenerateCards();
+            StartCoroutine(DelayGenerateCards(0.5f));
         }
+    }
+
+
+    private IEnumerator DelayGenerateCards(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ClearPreviousCards();
+        GenerateCards();
     }
 }

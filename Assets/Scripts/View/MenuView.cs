@@ -11,11 +11,6 @@ public class MenuView : MonoBehaviour
     [SerializeField] private GameObject panelNickName;
     [SerializeField] private ParticleSystem particleEffectPanelNickName;
 
-    [Header("Transitions")]
-
-    public MenuTransitionsUI menuTransitionsUI;
-
-
     //Show panel nickname
     public void ShowPanelNickName(bool isShow)
     {

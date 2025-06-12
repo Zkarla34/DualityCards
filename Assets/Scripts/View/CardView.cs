@@ -1,12 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class CardView : MonoBehaviour
 {
-    public int cardId;
+    private int cardId;
     private Texture2D frontTexture;
     private Texture2D backTexture;
+
+    [SerializeField] Image image;
 
     [SerializeField] private Renderer frontRenderer;
     [SerializeField] private Transform particleSpawnPoint;

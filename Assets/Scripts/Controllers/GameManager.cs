@@ -37,10 +37,4 @@ public class GameManager : MonoBehaviour
 
         highScoreManager.AddPlayerScore(playerName, currentScore);
     }
-
-    public IEnumerator NextScene(float delay, int sceneIndex)
-    {
-        yield return new WaitForSeconds(delay);
-        SceneManager.LoadScene(sceneIndex);
-    }
 }

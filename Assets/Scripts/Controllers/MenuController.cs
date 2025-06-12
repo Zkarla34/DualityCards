@@ -5,8 +5,9 @@ using UnityEngine.SceneManagement;
 public class MenuController : MonoBehaviour
 {
     [SerializeField] private MenuView menuView;
-    [SerializeField] private GameManager gameManager;
     [SerializeField] private PlayerModel playerModel;
+    [SerializeField] private MenuControllerTransitions menuControllerTransitions;
+    [SerializeField] private SceneTransition SceneTransition;
 
     private void Start()
     {
@@ -24,23 +25,23 @@ public class MenuController : MonoBehaviour
     public void OnPlayButtonClicked()
     {
         menuView.ShowPanelNickName(true);
-        menuView.menuTransitionsUI.ShowPanelImageNickName();
+        menuControllerTransitions.OnOpenNicknamePanel();
     }
 
-
+    //Button Panel NickName
     public void OnSaveButtonClicked()
     {
         playerModel.Name = menuView.inputName.text;
         GameManager.Instance.playerName = playerModel.Name;
         menuView.PlayNicknameParticle();
-        menuView.menuTransitionsUI.HidePanelImageNickName();
-        StartCoroutine(gameManager.NextScene(0.7f, 1));
+        menuControllerTransitions.OnCloseNicknamePanel();
+        menuControllerTransitions.OnStartGameButtonPressed();
     }
 
     //Go to credits
     public void OnCreditsButtonClicked()
     {
-        SceneManager.LoadScene(3);
+        SceneTransition.FadeToScene("Credits");
     }
 
 }
