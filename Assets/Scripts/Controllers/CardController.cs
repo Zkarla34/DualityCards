@@ -7,10 +7,7 @@ using UnityEngine.UI;
 
 public class CardController : MonoBehaviour
 {
-    [SerializeField] private GameObject cardPrefab;
-    [SerializeField] private Texture2D[] textures;
-    [SerializeField] private Texture2D backTexture;
-    [SerializeField] private Transform cardParent;
+    [SerializeField] private Sprite[] sprites;
     [SerializeField] private GameObject[] matchParticlePrefabs;
     [SerializeField] private MenuWin menuWin;
     [SerializeField] private ScoreManager scoreManager;
@@ -18,6 +15,12 @@ public class CardController : MonoBehaviour
 
     private List<CardView> cards = new();
     private CardView showCard = null;
+
+    [SerializeField] private RectTransform cardsAreaUI;
+    [SerializeField] private GameObject cardUIPrefab;
+    [SerializeField] private Sprite backSprite;
+
+
 
     private int currentLevel = 1;
     private bool allowInteraction = true;
@@ -34,7 +37,7 @@ public class CardController : MonoBehaviour
 
     private void ClearPreviousCards()
     {
-        foreach (Transform child in cardParent)
+        foreach (Transform child in cardsAreaUI)
         {
             Destroy(child.gameObject);
         }
@@ -42,69 +45,6 @@ public class CardController : MonoBehaviour
         showCard = null;
     }
 
-    private void GenerateCards()
-    {
-        int pairCount = 2 + (currentLevel - 1);
-        int totalCards = pairCount * 2;
-
-        // Cálculo dinámico del tamaño de la grilla
-        int gridCols = Mathf.CeilToInt(Mathf.Sqrt(totalCards));
-        int gridRows = Mathf.CeilToInt((float)totalCards / gridCols);
-
-        // Disminuye el tamaño de las cartas a medida que hay más
-        float scaleFactor = Mathf.Clamp(1f - (currentLevel * 0.05f), 0.5f, 1f);
-        float spacing = 2.5f * scaleFactor;
-
-        float offsetX = (gridCols - 1) * spacing * 0.5f;
-        float offsetZ = (gridRows - 1) * spacing * 0.5f;
-
-        List<(int id, Texture2D tex)> selected = new();
-
-        for (int i = 0; i < pairCount; i++)
-        {
-            selected.Add((i, textures[i]));
-            selected.Add((i, textures[i]));
-        }
-
-        // Mezclar
-        for (int i = 0; i < selected.Count; i++)
-        {
-            var temp = selected[i];
-            int rand = Random.Range(i, selected.Count);
-            selected[i] = selected[rand];
-            selected[rand] = temp;
-        }
-
-        for (int i = 0; i < selected.Count; i++)
-        {
-            int row = i / gridCols;
-            int col = i % gridCols;
-
-            Vector3 pos = new Vector3(col * spacing - offsetX, 0f, - row * spacing + offsetZ);
-
-            GameObject go = Instantiate(cardPrefab, pos, Quaternion.identity, cardParent);
-
-            // Escalado dinámico según nivel
-            go.transform.localScale = Vector3.zero;
-
-            // Aparecer animado
-            LeanTween.scale(go, Vector3.one * scaleFactor, 0.3f)
-                     .setEaseOutBack()
-                     .setDelay(i * 0.05f);
-
-
-            CardView card = go.GetComponent<CardView>();
-            card.Initialize(this, backTexture);
-            card.SetCard(selected[i].id, selected[i].tex);
-
-            int particleIndex = Mathf.Clamp(currentLevel - 1, 0, matchParticlePrefabs.Length - 1);
-            card.SetParticleSystem(matchParticlePrefabs[particleIndex]);
-
-            cards.Add(card);
-        }
-
-        EnableInteraction(); 
-    }
 
     public void OnCardSelected(CardView selected)
     {
@@ -159,16 +99,62 @@ public class CardController : MonoBehaviour
             }
         });
     }
+    
+
+    private void GenerateCards()
+    {
+        int pairCount = 2 + (currentLevel - 1);
+        int totalCards = pairCount * 2;
+
+        int gridCols = Mathf.CeilToInt(Mathf.Sqrt(totalCards));
+        int gridRows = Mathf.CeilToInt((float)totalCards / gridCols);
+
+        float scale = Mathf.Clamp(1f - currentLevel * 0.05f, 0.5f, 1f);
+
+        List<(int id, Sprite sprite)> selected = new();
+        for (int i = 0; i < pairCount; i++)
+        {
+            selected.Add((i, sprites[i]));
+            selected.Add((i, sprites[i]));
+        }
+
+        // Shuffle
+        for (int i = 0; i < selected.Count; i++)
+        {
+            var tmp = selected[i];
+            int rand = Random.Range(i, selected.Count);
+            selected[i] = selected[rand];
+            selected[rand] = tmp;
+        }
+
+        // Posicionar en grilla manual o usar GridLayoutGroup
+        for (int i = 0; i < totalCards; i++)
+        {
+            GameObject cardGO = Instantiate(cardUIPrefab, cardsAreaUI);
+            cardGO.transform.localScale = Vector3.one * scale;
+
+            CardView cardUI = cardGO.GetComponent<CardView>();
+            cardUI.Initialize(this, backSprite);
+            cardUI.SetCard(selected[i].id, selected[i].sprite);
+
+            int particleIndex = Mathf.Clamp(currentLevel - 1, 0, matchParticlePrefabs.Length - 1);
+            cardUI.SetParticleSystem(matchParticlePrefabs[particleIndex]);
+
+            cards.Add(cardUI);
+        }
+
+        EnableInteraction();
+    }
 
     private void LoadNextLevel()
     {
         int nextLevel = currentLevel + 1;
         int nextPairCount = levelModel.GetPairCount(nextLevel);
 
-        // Verificamos si hay suficientes texturas para el siguiente nivel
-        if (nextPairCount * 2 > textures.Length)
+        // Verificamos si hay suficientes sprites para el siguiente nivel
+        if (nextPairCount * 2 > sprites.Length)
         {
-            // No hay más texturas disponibles: juego terminado
+            // No hay más sprites disponibles: juego terminado
             menuWin.WinShow();
         }
         else

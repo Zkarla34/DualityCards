@@ -2,39 +2,39 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class CardView : MonoBehaviour
+public class CardView : MonoBehaviour, IPointerClickHandler
 {
-    private int cardId;
-    private Texture2D frontTexture;
-    private Texture2D backTexture;
+    public int cardId;
+    private Sprite frontSprite;
+    private Sprite backSprite;
 
-    [SerializeField] Image image;
-
-    [SerializeField] private Renderer frontRenderer;
+    public Image image;
     [SerializeField] private Transform particleSpawnPoint;
 
     private ParticleSystem matchParticle;
     private bool isFlipped = false;
     private CardController controller;
 
-    public void Initialize(CardController controllerRef, Texture2D backTex)
+    public void Initialize(CardController controllerRef, Sprite backImage)
     {
         controller = controllerRef;
-        backTexture = backTex;
-        frontRenderer.material.mainTexture = backTexture;
+        backSprite = backImage;
+        if (image == null)
+            image = GetComponent<Image>();
+        image.sprite = backSprite;
     }
 
-    public void SetCard(int id, Texture2D tex)
+    public void SetCard(int id, Sprite frontSprite)
     {
         cardId = id;
-        frontTexture = tex;
+        this.frontSprite = frontSprite;
     }
 
     public void SetParticleSystem(GameObject particlePrefab)
     {
         if (particlePrefab != null && particleSpawnPoint != null)
         {
-            GameObject instance = Instantiate(particlePrefab, particleSpawnPoint.position, Quaternion.identity, transform);
+            GameObject instance = Instantiate(particlePrefab, particleSpawnPoint.position, Quaternion.identity, particleSpawnPoint);
 
             // Buscar también en hijos
             matchParticle = instance.GetComponent<ParticleSystem>();
@@ -51,7 +51,7 @@ public class CardView : MonoBehaviour
         }
     }
 
-    private void OnMouseDown()
+    public void OnPointerClick(PointerEventData e)
     {
         if (controller != null && controller.CanShowCard())
         {
@@ -66,8 +66,8 @@ public class CardView : MonoBehaviour
 
         LeanTween.rotateY(gameObject, 90f, 0.25f).setOnComplete(() =>
         {
-            frontRenderer.material.mainTexture = frontTexture;
-            LeanTween.rotateY(gameObject, 180f, 0.25f).setOnComplete(() => onComplete?.Invoke());
+            image.sprite = frontSprite;
+            LeanTween.rotateY(gameObject, 0f, 0.25f).setOnComplete(() => onComplete?.Invoke());
         });
     }
 
@@ -76,10 +76,11 @@ public class CardView : MonoBehaviour
         if (!isFlipped) return;
         isFlipped = false;
 
-        LeanTween.rotateY(gameObject, 90f, 0.25f).setOnComplete(() =>
+        
+        LeanTween.rotateY(gameObject, 0f, 0.25f).setOnComplete(() =>
         {
-            frontRenderer.material.mainTexture = backTexture;
-            LeanTween.rotateY(gameObject, 0f, 0.25f).setOnComplete(() => onComplete?.Invoke());
+            image.sprite = backSprite;
+            LeanTween.rotateY(gameObject, 90f, 0.25f).setOnComplete(() => onComplete?.Invoke());
         });
     }
 
